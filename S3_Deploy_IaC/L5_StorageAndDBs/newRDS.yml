@@ -1,0 +1,13 @@
+Resources:
+  VitUdacityDbInstance:
+    Type: AWS::RDS::DBInstance
+    Properties: 
+      AllocatedStorage: 20
+      DBInstanceClass: "db.m3.medium"
+      DBInstanceIdentifier: "dbi-vit-udacity"
+      DBName: "VitUdacityDB01"
+      Engine: "mysql"
+      MasterUsername: "timkatje"
+      MasterUserPassword: "Omega999"
+      VPCSecurityGroups: 
+        - "sg-007427d8e903ed2c1"
