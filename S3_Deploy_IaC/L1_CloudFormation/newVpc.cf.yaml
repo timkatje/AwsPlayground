@@ -1,0 +1,10 @@
+Description: >
+  Tim Katje
+  Creates a new VPC
+
+Resources:
+  newVPC:
+    Type: AWS::EC2::VPC
+    Properties:
+      CidrBlock: 10.0.0.0/16
+      EnableDnsSupport: true
