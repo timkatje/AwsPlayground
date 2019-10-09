@@ -9,6 +9,26 @@ Parameters:
         Type: String
         Default: 10.0.0.0/16
 
+    PublicSubnet1CIDR: 
+        Description: Please enter the IP range (CIDR notation) for Public Subnet #1
+        Type: String
+        Default: 10.0.0.0/16
+
+    PublicSubnet2CIDR: 
+        Description: Please enter the IP range (CIDR notation) for Public Subnet #2
+        Type: String
+        Default: 10.0.1.0/16
+
+    PrivateSubnet1CIDR: 
+        Description: Please enter the IP range (CIDR notation) for Private Subnet #1
+        Type: String
+        Default: 10.0.2.0/16
+
+    PrivateSubnet2CIDR: 
+        Description: Please enter the IP range (CIDR notation) for Private Subnet #2
+        Type: String
+        Default: 10.0.3.0/16
+
 Resources:
     VPC:
         Type: AWS::EC2::VPC
@@ -28,4 +48,41 @@ Resources:
       Type: AWS::EC2::VPCGatewayAttachment
       Properties:
         VpcId: !Ref VPC
-        InternetGatewayId: !Ref InternetGateway                   
+        InternetGatewayId: !Ref InternetGateway
+    PublicSubnet1:
+        Type: AWS::EC2::Subnet
+        Properties:
+            AvailabilityZone: !Select [ 0, !GetAZs '' ]
+            VpcId: !Ref VPC
+            CidrBlock: !Ref PublicSubnet1CIDR
+            Tags:
+                -   Key: Name
+                    Value: !Sub ${EnvironmentName} Public Subnet (AZ1)
+    PublicSubnet2:
+        Type: AWS::EC2::Subnet
+        Properties:
+            AvailabilityZone: !Select [ 1, !GetAZs '' ]
+            VpcId: !Ref VPC
+            CidrBlock: !Ref PublicSubnet2CIDR
+            Tags:
+                -   Key: Name
+                    Value: !Sub ${EnvironmentName} Public Subnet (AZ2)
+    PrivateSubnet1:
+        Type: AWS::EC2::Subnet
+        Properties:
+            AvailabilityZone: !Select [ 0, !GetAZs '' ]
+            VpcId: !Ref VPC
+            CidrBlock: !Ref PrivateSubnet1CIDR
+            Tags:
+                -   Key: Name
+                    Value: !Sub ${EnvironmentName} Public Subnet (AZ1)
+    PrivateSubnet2:
+        Type: AWS::EC2::Subnet
+        Properties:
+            AvailabilityZone: !Select [ 1, !GetAZs '' ]
+            VpcId: !Ref VPC
+            CidrBlock: !Ref PrivateSubnet2CIDR
+            Tags:
+                -   Key: Name
+                    Value: !Sub ${EnvironmentName} Public Subnet (AZ2)
+                    
