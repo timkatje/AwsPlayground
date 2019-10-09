@@ -38,17 +38,20 @@ Resources:
             Tags:
                 -   Key: Name
                     Value: !Ref EnvironmentName
+
     InternetGateway:
         Type: AWS::EC2::InternetGateway
         Properties:
             Tags:
                 -   Key: Name
                     Value: !Ref EnvironmentName
+
     InternetGatewayAttachment:
       Type: AWS::EC2::VPCGatewayAttachment
       Properties:
         VpcId: !Ref VPC
         InternetGatewayId: !Ref InternetGateway
+
     PublicSubnet1:
         Type: AWS::EC2::Subnet
         Properties:
@@ -58,6 +61,7 @@ Resources:
             Tags:
                 -   Key: Name
                     Value: !Sub ${EnvironmentName} Public Subnet (AZ1)
+
     PublicSubnet2:
         Type: AWS::EC2::Subnet
         Properties:
@@ -67,6 +71,7 @@ Resources:
             Tags:
                 -   Key: Name
                     Value: !Sub ${EnvironmentName} Public Subnet (AZ2)
+
     PrivateSubnet1:
         Type: AWS::EC2::Subnet
         Properties:
@@ -75,7 +80,8 @@ Resources:
             CidrBlock: !Ref PrivateSubnet1CIDR
             Tags:
                 -   Key: Name
-                    Value: !Sub ${EnvironmentName} Public Subnet (AZ1)
+                    Value: !Sub ${EnvironmentName} Private Subnet (AZ1)
+
     PrivateSubnet2:
         Type: AWS::EC2::Subnet
         Properties:
@@ -84,5 +90,6 @@ Resources:
             CidrBlock: !Ref PrivateSubnet2CIDR
             Tags:
                 -   Key: Name
-                    Value: !Sub ${EnvironmentName} Public Subnet (AZ2)
+                    Value: !Sub ${EnvironmentName} Private Subnet (AZ2)
+
                     
