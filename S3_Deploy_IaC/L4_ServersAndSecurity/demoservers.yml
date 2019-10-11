@@ -55,7 +55,7 @@ Resources:
             VolumeSize: '10'
       ImageId: ami-005bdb005fb00e791
       InstanceType: s3.medium
-      KeyName: that-one
+      KeyName: aws-quickstarts
       SecurityGroups:
         - Ref: WebServerSecGroup
       UserData:
