@@ -13,7 +13,7 @@ Resources:
     Properties:
       GroupDescription: Allow http to our load balancer
       VpcId:
-        Fn::!ImportValue:
+        Fn::ImportValue:
           !Sub "${EnvironmentName}-VPCID"
       SecurityGroupIngress:
         - IpProtocol: tcp
@@ -30,7 +30,7 @@ Resources:
     Properties:
       GroupDescription: Allow http to our hosts and SSH from local only
       VpcId:
-        Fn::!ImportValue:
+        Fn::ImportValue:
           !Sub "${EnvironmentName}-VPCID"
       SecurityGroupIngress:
         - IpProtocol: tcp
