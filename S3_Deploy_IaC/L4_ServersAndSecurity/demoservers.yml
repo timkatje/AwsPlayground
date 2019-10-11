@@ -54,7 +54,7 @@ Resources:
           Ebs:
             VolumeSize: '10'
       ImageId: ami-005bdb005fb00e791
-      InstanceType: s3.medium
+      InstanceType: t3.medium
       KeyName: aws-quickstarts
       SecurityGroups:
         - Ref: WebServerSecGroup
