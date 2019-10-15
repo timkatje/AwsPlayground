@@ -91,7 +91,7 @@ Resources:
     Properties:
       AvailabilityZone: !Select [ 1, !GetAZs '' ]
       VpcId: !Ref VPC
-      CidrBlock: !Ref IpCidrSubnetPvt01
+      CidrBlock: !Ref IpCidrSubnetPvt02
       Tags:
         - Key: Name
           Value: !Sub ${EnvironmentName} Private Subnet (AZ2)
