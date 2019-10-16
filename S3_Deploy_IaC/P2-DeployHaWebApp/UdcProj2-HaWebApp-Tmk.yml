@@ -116,13 +116,13 @@ Resources:
           Value: !Sub ${EnvName} Private Subnet (AZ2)
       VpcId: !Ref VPC
 
-  NatGw01-EIP:
+  EipNatGw01:
     Type: AWS::EC2::EIP
     DependsOn: InetGwAttach
     Properties:
       Domain: vpc
 
-  NatGw02-EIP:
+  EipNatGw02:
     Type: AWS::EC2::EIP
     DependsOn: InetGwAttach
     Properties:
@@ -131,13 +131,13 @@ Resources:
   NatGw01:
     Type: "AWS::EC2::NatGateway"
     Properties:
-      AllocationId: !GetAtt NatGw01-EIP.AllocationId
+      AllocationId: !GetAtt EipNatGw01.AllocationId
       SubnetId: !Ref SubnetPub01
   
   NatGw02:
     Type: "AWS::EC2::NatGateway"
     Properties:
-      AllocationId: !GetAtt NatGw02-EIP.AllocationId
+      AllocationId: !GetAtt EipNatGw02.AllocationId
       SubnetId: !Ref SubnetPub02
 
       
