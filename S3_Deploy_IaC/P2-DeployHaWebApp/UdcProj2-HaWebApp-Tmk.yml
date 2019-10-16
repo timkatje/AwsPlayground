@@ -1,6 +1,6 @@
 Parameters:
 # whatever you consider a changing value, put it as a parameter instead of hard-coding it into your script
-  EnvironmentName:
+  EnvName:
       Description: The environment name prefixed to all resources created by this template
       Type: String
       Default: UdcProj2-HaWebApp-Tmk
@@ -47,132 +47,140 @@ Resources:
   #         aws s3 cp s3://udacity-demo-1/udacity.zip .
   #         unzip -o udacity.zip
 
+
   VPC:
-    Type: AWS::EC2::VPC
+    Type: "AWS::EC2::VPC"
     Properties:
       CidrBlock: !Ref IpCidrVpc
       EnableDnsHostnames: true
+      EnableDnsSupport: true
+      InstanceTenancy: default
       Tags:
         - Key: Name
-          Value: !Ref EnvironmentName
-
-  InternetGateway:
-    Type: AWS::EC2::InternetGateway
-    Properties:
-      Tags:
-        - Key: Name
-          Value: !Ref EnvironmentName
-
-  InternetGatewayAttachment:
-    Type: AWS::EC2::VPCGatewayAttachment
-    Properties:
-      VpcId: !Ref VPC
-      InternetGatewayId: !Ref InternetGateway
-
-  PublicSubnet1:
-    Type: AWS::EC2::Subnet
-    Properties:
-      AvailabilityZone: !Select [ 0, !GetAZs '' ]
-      VpcId: !Ref VPC
-      CidrBlock: !Ref IpCidrSubnetPub01
-      Tags:
-        - Key: Name
-          Value: !Sub ${EnvironmentName} Public Subnet (AZ1)
-
-  PublicSubnet2:
-    Type: AWS::EC2::Subnet
-    Properties:
-      AvailabilityZone: !Select [ 1, !GetAZs '' ]
-      VpcId: !Ref VPC
-      CidrBlock: !Ref IpCidrSubnetPub02
-      Tags:
-        - Key: Name
-          Value: !Sub ${EnvironmentName} Public Subnet (AZ2)
-
-  PrivateSubnet1:
-    Type: AWS::EC2::Subnet
-    Properties:
-      AvailabilityZone: !Select [ 0, !GetAZs '' ]
-      VpcId: !Ref VPC
-      CidrBlock: !Ref IpCidrSubnetPvt01
-      Tags:
-        - Key: Name
-          Value: !Sub ${EnvironmentName} Private Subnet (AZ1)
-
-  PrivateSubnet2:
-    Type: AWS::EC2::Subnet
-    Properties:
-      AvailabilityZone: !Select [ 1, !GetAZs '' ]
-      VpcId: !Ref VPC
-      CidrBlock: !Ref IpCidrSubnetPvt02
-      Tags:
-        - Key: Name
-          Value: !Sub ${EnvironmentName} Private Subnet (AZ2)
-
-  NatGateway1EIP:
-    Type: AWS::EC2::EIP
-    DependsOn: InternetGatewayAttachment
-    Properties:
-      Domain: vpc
-
-  NatGateway2EIP:
-    Type: AWS::EC2::EIP
-    DependsOn: InternetGatewayAttachment
-    Properties:
-      Domain: vpc
-
-  NatGateway1:
-    Type: "AWS::EC2::NatGateway"
-    Properties:
-      AllocationId: !GetAtt NatGateway1EIP.AllocationId
-      SubnetId: !Ref PublicSubnet1
+          Value: !Ref EnvName
   
-  NatGateway2:
+  InetGw:
+    Type: "AWS::EC2::InternetGateway"
+    Properties:
+      Tags:
+        - Key: Name
+          Value: !Ref EnvName
+
+  InetGwAttach:
+    Type: "AWS::EC2::VPCGatewayAttachment"
+    Properties:
+      InternetGatewayId: !Ref InetGw
+      VpcId: !Ref VPC
+  
+  SubnetPub01:
+    Type: "AWS::EC2::Subnet"
+    Properties:
+      AvailabilityZone: !Select [ 0, !GetAZs '' ]
+      CidrBlock: !Ref IpCidrSubnetPub01
+      MapPublicIpOnLaunch: false
+      Tags:
+        - Key: Name
+          Value: !Sub ${EnvName} Public Subnet (AZ1)
+      VpcId: !Ref VPC
+  
+  SubnetPub02:
+    Type: "AWS::EC2::Subnet"
+    Properties:
+      AvailabilityZone: !Select [ 1, !GetAZs '' ]
+      CidrBlock: !Ref IpCidrSubnetPub02
+      MapPublicIpOnLaunch: false
+      Tags:
+        - Key: Name
+          Value: !Sub ${EnvName} Public Subnet (AZ2)
+      VpcId: !Ref VPC
+  
+  SubnetPvt01:
+    Type: "AWS::EC2::Subnet"
+    Properties:
+      AvailabilityZone: !Select [ 0, !GetAZs '' ]
+      CidrBlock: !Ref IpCidrSubnetPvt01
+      MapPublicIpOnLaunch: false
+      Tags:
+        - Key: Name
+          Value: !Sub ${EnvName} Private Subnet (AZ1)
+      VpcId: !Ref VPC
+  
+  SubnetPvt02:
+    Type: "AWS::EC2::Subnet"
+    Properties:
+      AvailabilityZone: !Select [ 1, !GetAZs '' ]
+      CidrBlock: !Ref IpCidrSubnetPvt02
+      MapPublicIpOnLaunch: false
+      Tags:
+        - Key: Name
+          Value: !Sub ${EnvName} Private Subnet (AZ2)
+      VpcId: !Ref VPC
+
+  NatGw01-EIP:
+    Type: AWS::EC2::EIP
+    DependsOn: InetGwAttach
+    Properties:
+      Domain: vpc
+
+  NatGw02-EIP:
+    Type: AWS::EC2::EIP
+    DependsOn: InetGwAttach
+    Properties:
+      Domain: vpc
+
+  NatGw01:
     Type: "AWS::EC2::NatGateway"
     Properties:
-      AllocationId: !GetAtt NatGateway2EIP.AllocationId
-      SubnetId: !Ref PublicSubnet2
+      AllocationId: !GetAtt NatGw01-EIP.AllocationId
+      SubnetId: !Ref SubnetPub01
+  
+  NatGw02:
+    Type: "AWS::EC2::NatGateway"
+    Properties:
+      AllocationId: !GetAtt NatGw02-EIP.AllocationId
+      SubnetId: !Ref SubnetPub02
 
+      
 Outputs: 
   #Bonus points for useful outputs!
   VPC: 
     Description: A reference to the project's VPC
     Value: !Ref VPC
     Export:
-      Name: !Sub ${EnvironmentName}-VPCID
+      Name: !Sub ${EnvName}-VPCID
 
   PublicSubnets:
     Description: List of all public subnets
-    Value: !Join [ ",", [ !Ref PublicSubnet1, !Ref PublicSubnet2 ]]
+    Value: !Join [ ",", [ !Ref SubnetPub01, !Ref SubnetPub02 ]]
     Export:
-      Name: !Sub ${EnvironmentName}-Subnets-Pub
+      Name: !Sub ${EnvName}-Subnets-Pub
 
   PublicSubnet1:
     Description: Public subnet in AZ1
-    Value: !Ref PublicSubnet1
+    Value: !Ref SubnetPub01
     Export:
-      Name: !Sub ${EnvironmentName}-Subnet-Pub1
+      Name: !Sub ${EnvName}-Subnet-Pub01
 
   PublicSubnet2: 
     Description: Public subnet in AZ2
-    Value: !Ref PublicSubnet2
+    Value: !Ref SubnetPub02
     Export:
-      Name: !Sub ${EnvironmentName}-Subnet-Pub2
+      Name: !Sub ${EnvName}-Subnet-Pub02
 
   PrivateSubnets:
     Description: List of all private subnets
-    Value: !Join [ ",", [ !Ref PrivateSubnet1, !Ref PrivateSubnet2 ]]
+    Value: !Join [ ",", [ !Ref SubnetPvt01, !Ref SubnetPvt02 ]]
     Export:
-      Name: !Sub ${EnvironmentName}-Subnets-Pvt
+      Name: !Sub ${EnvName}-Subnets-Pvt
 
   PrivateSubnet1:
     Description: A reference to the private subnet in the 1st Availability Zone
-    Value: !Ref PrivateSubnet1
+    Value: !Ref SubnetPvt01
     Export:
-      Name: !Sub ${EnvironmentName}-PRI1-SN
+      Name: !Sub ${EnvName}-Subnet-Pvt01
 
   PrivateSubnet2: 
     Description: A reference to the private subnet in the 2nd Availability Zone
-    Value: !Ref PrivateSubnet2
+    Value: !Ref SubnetPvt02
     Export:
-      Name: !Sub ${EnvironmentName}-PRI2-SN
+      Name: !Sub ${EnvName}-Subnet-Pvt02
