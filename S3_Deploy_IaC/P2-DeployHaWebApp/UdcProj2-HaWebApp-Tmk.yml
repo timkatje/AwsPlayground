@@ -140,7 +140,35 @@ Resources:
       AllocationId: !GetAtt EipNatGw02.AllocationId
       SubnetId: !Ref SubnetPub02
 
-      
+  RouteTablePub:
+    Type: AWS::EC2::RouteTable
+    Properties: 
+      VpcId: !Ref VPC
+      Tags: 
+        - Key: Name 
+          Value: !Sub ${EnvName} Public Routes
+
+  DefaultRoutePub: 
+    Type: AWS::EC2::Route
+    DependsOn: InetGwAttach
+    Properties: 
+      RouteTableId: !Ref RouteTablePub
+      DestinationCidrBlock: 0.0.0.0/0
+      GatewayId: !Ref InetGw
+
+  RouteTableAssocSubnetPub01:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId: !Ref RouteTablePub
+      SubnetId: !Ref SubnetPub01
+
+  RouteTableAssocSubnetPub02:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId: !Ref RouteTablePub
+      SubnetId: !Ref SubnetPub02
+    
+
 Outputs: 
   #Bonus points for useful outputs!
   VPC: 
