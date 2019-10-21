@@ -250,18 +250,21 @@ Resources:
           Value: !Sub ${EnvName} Bastian hosts
           PropagateAtLaunch: 'true'
 
-  AutoScaleGroupWebhosts:
+  AutoScaleGroupWebhosts: 
     Type: AWS::AutoScaling::AutoScalingGroup
     Properties:
-      VPCZoneIdentifier:
-      - Fn::ImportValue:
-          !Sub "${EnvName}-Subnets-Pub" #Move to PVT once working, and lock down access
+      AutoScalingGroupName: asg-UdcProj2-Webhosts
       LaunchConfigurationName:
         Ref: LnchCnfgWebhosts
-      MinSize: '1'  # Change to 4 after testing
-      MaxSize: '2'
-      # TargetGroupARNs:
-      # - Ref: WebAppTargetGroup
+      MaxSize: '1'
+      MinSize: '2'
+      VPCZoneIdentifier:
+      - Fn::ImportValue:
+          !Sub "${EnvName}-Subnets-Pub"
+      Tags: 
+        - Key: Name
+          Value: !Sub ${EnvName} Webhosts
+          PropagateAtLaunch: 'true'
 
 Outputs: 
   #Bonus points for useful outputs!
