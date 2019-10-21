@@ -183,9 +183,7 @@ Resources:
           FromPort: 0
           ToPort: 65535
           CidrIp: 0.0.0.0/0
-      VpcId:
-        Fn::ImportValue:
-          !Sub "${EnvName}-VPCID"
+      VpcId: !Ref VPC
   
   LnchCnfgBastians:
     Type: "AWS::AutoScaling::LaunchConfiguration"
