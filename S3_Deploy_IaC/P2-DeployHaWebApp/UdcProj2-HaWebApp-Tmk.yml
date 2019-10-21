@@ -196,7 +196,7 @@ Resources:
       ImageId: ami-08d489468314a58df
       InstanceType: t2.micro
       KeyName: aws-quickstarts
-      LaunchConfigurationName: LC-UdcProj2-Bastians
+      # LaunchConfigurationName: LC-UdcProj2-Bastians
       SecurityGroups: #Associate with public/bastian security group(s) later
         - Ref: SecGrpBastians
       UserData:
@@ -217,7 +217,7 @@ Resources:
       ImageId: ami-005bdb005fb00e791
       InstanceType: t3.medium
       KeyName: aws-quickstarts
-      LaunchConfigurationName: LC-UdcProj2-Webhosts
+      # LaunchConfigurationName: LC-UdcProj2-Webhosts
       SecurityGroups:
         - Ref: SecGrpBastians # Switch to Webhost-specific security group later
       UserData: # Script provided in final-project-starter.yml
