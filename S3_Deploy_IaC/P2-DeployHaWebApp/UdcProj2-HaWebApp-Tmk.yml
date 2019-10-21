@@ -239,21 +239,21 @@ Resources:
           aws s3 cp s3://udacity-demo-1/udacity.zip .
           unzip -o udacity.zip
 
-AutoScaleGroupBastions: 
-  Type: AWS::AutoScaling::AutoScalingGroup
-  Properties:
-    AutoScalingGroupName: asg-UdcProj2-Bastians
-    LaunchConfigurationName:
-      Ref: LnchCnfgBastians
-    MaxSize: '1'
-    MinSize: '1'
-    VPCZoneIdentifier:
-    - Fn::ImportValue:
-        !Sub "${EnvName}-Subnets-Pub"
-    Tags: 
-      - Key: Name
-        Value: !Sub ${EnvName} Bastian hosts
-        PropagateAtLaunch: 'true'
+  AutoScaleGroupBastions: 
+    Type: AWS::AutoScaling::AutoScalingGroup
+    Properties:
+      AutoScalingGroupName: asg-UdcProj2-Bastians
+      LaunchConfigurationName:
+        Ref: LnchCnfgBastians
+      MaxSize: '1'
+      MinSize: '1'
+      VPCZoneIdentifier:
+      - Fn::ImportValue:
+          !Sub "${EnvName}-Subnets-Pub"
+      Tags: 
+        - Key: Name
+          Value: !Sub ${EnvName} Bastian hosts
+          PropagateAtLaunch: 'true'
 
   AutoScaleGroupWebhosts:
     Type: AWS::AutoScaling::AutoScalingGroup
