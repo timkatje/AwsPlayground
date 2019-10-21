@@ -167,6 +167,25 @@ Resources:
     Properties:
       RouteTableId: !Ref RteTblPub
       SubnetId: !Ref SubnetPub02
+
+  # Define the security groups for the project
+  SecGrpBastians: # Lock down this security group later
+    Type: "AWS::EC2::SecurityGroup"
+    Properties:
+      GroupDescription: Allow all traffic to Bastian hosts (in and out)
+      SecurityGroupEgress:
+        - IpProtocol: tcp
+          FromPort: 0
+          ToPort: 65535
+          CidrIp: 0.0.0.0/0
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 0
+          ToPort: 65535
+          CidrIp: 0.0.0.0/0
+      VpcId:
+        Fn::ImportValue:
+          !Sub "${EnvName}-VPCID"
   
   LnchCnfgBastians:
     Type: "AWS::AutoScaling::LaunchConfiguration"
@@ -180,9 +199,9 @@ Resources:
       ImageId: ami-08d489468314a58df
       InstanceType: t2.micro
       KeyName: aws-quickstarts
-      # LaunchConfigurationName: String
-      # SecurityGroups: #Associate with public/bastian security group(s) later
-      #   - String
+      LaunchConfigurationName: LC-UdcProj2-Bastians
+      SecurityGroups: #Associate with public/bastian security group(s) later
+        - String
       UserData:
         Fn::Base64: !Sub |
           #!/bin/bash
