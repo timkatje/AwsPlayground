@@ -32,6 +32,8 @@ Parameters:
 
 Resources:
   #instance profile contains the IAM Role name(s) that we want to associate to our auto scaling EC2 Servers
+    # Manually created a "UdacityS3ReadOnlyEC2" IAM role within AWS Console that references the AWS-provided
+    # AmazonS3ReadOnlyAccess IAM Policy and which permits EC2 services to assume the role.
   ProfileWithRolesForOurApp:
     Type: AWS::IAM::InstanceProfile
     Properties: 
