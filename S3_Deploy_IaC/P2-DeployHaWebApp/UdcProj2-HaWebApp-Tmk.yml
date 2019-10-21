@@ -47,7 +47,6 @@ Resources:
   #         aws s3 cp s3://udacity-demo-1/udacity.zip .
   #         unzip -o udacity.zip
 
-
   VPC:
     Type: "AWS::EC2::VPC"
     Properties:
@@ -210,7 +209,7 @@ Resources:
     Type: "AWS::AutoScaling::LaunchConfiguration"
     Properties:
       AssociatePublicIpAddress: true  #Disable when moving to Pvt subnets
-      # IamInstanceProfile: ProfileWithRolesForOurApp
+      IamInstanceProfile: ProfileWithRolesForOurApp
       BlockDeviceMappings:
         - DeviceName: "/dev/sdk"
           Ebs:
@@ -221,16 +220,16 @@ Resources:
       LaunchConfigurationName: LC-UdcProj2-Webhosts
       SecurityGroups:
         - Ref: SecGrpBastians # Switch to Webhost-specific security group later
-      # UserData: # May need to uncomment this section to get instances to pull data from Udc's S3 bucket
-      #   Fn::Base64: !Sub |
-      #     #!/bin/bash
-      #     apt-get update -y
-      #     apt-get install unzip awscli -y
-      #     apt-get install apache2 -y
-      #     systemctl start apache2.service
-      #     cd /var/www/html
-      #     aws s3 cp s3://udacity-demo-1/udacity.zip .
-      #     unzip -o udacity.zip
+      UserData: # Script provided in final-project-starter.yml
+        Fn::Base64: !Sub |
+          #!/bin/bash
+          apt-get update -y
+          apt-get install unzip awscli -y
+          apt-get install apache2 -y
+          systemctl start apache2.service
+          cd /var/www/html
+          aws s3 cp s3://udacity-demo-1/udacity.zip .
+          unzip -o udacity.zip
   
   AutoScaleGroupBastions:
     Type: AWS::AutoScaling::AutoScalingGroup
