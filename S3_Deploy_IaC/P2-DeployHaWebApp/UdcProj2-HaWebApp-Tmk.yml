@@ -203,8 +203,8 @@ Resources:
       UserData:
         Fn::Base64: !Sub |
           #!/bin/bash
-          apt-get update -y
-          apt-get upgrade -y
+          sudo yum check-update -y
+          sudo yum update -y
   
   LnchCnfgWebhosts:
     Type: "AWS::AutoScaling::LaunchConfiguration"
@@ -219,8 +219,8 @@ Resources:
       InstanceType: t3.medium
       KeyName: aws-quickstarts
       LaunchConfigurationName: LC-UdcProj2-Webhosts
-      # SecurityGroups:
-      #   - Ref: WebServerSecGroup
+      SecurityGroups:
+        - Ref: SecGrpBastians # Switch to Webhost-specific security group later
       # UserData: # May need to uncomment this section to get instances to pull data from Udc's S3 bucket
       #   Fn::Base64: !Sub |
       #     #!/bin/bash
