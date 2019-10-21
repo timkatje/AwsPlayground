@@ -168,6 +168,40 @@ Resources:
       RouteTableId: !Ref RteTblPub
       SubnetId: !Ref SubnetPub02
     
+  LaunchConfigWebhosts:
+    Type: AWS::AutoScaling::LaunchConfiguration
+    Properties:
+      BlockDeviceMappings:
+        - DeviceName: "/dev/sdk"
+          Ebs:
+            VolumeSize: '10'
+      ImageId: ami-005bdb005fb00e791
+      InstanceType: t3.medium
+      KeyName: aws-quickstarts
+      # SecurityGroups:
+      #   - Ref: WebServerSecGroup
+      UserData:
+        Fn::Base64: !Sub |
+          #!/bin/bash
+          apt-get update -y
+          apt-get install unzip awscli -y
+          apt-get install apache2 -y
+          systemctl start apache2.service
+          cd /var/www/html
+          aws s3 cp s3://udacity-demo-1/udacity.zip .
+          unzip -o udacity.zip
+  AutoScaleGroupWebhosts:
+    Type: AWS::AutoScaling::AutoScalingGroup
+    Properties:
+      VPCZoneIdentifier:
+      - Fn::ImportValue:
+          !Sub "${EnvName}-Subnets-Pub" #Move to PVT once working, and lock down access
+      LaunchConfigurationName:
+        Ref: LaunchConfigWebhosts
+      MinSize: '4'
+      MaxSize: '4'
+      # TargetGroupARNs:
+      # - Ref: WebAppTargetGroup
 
 Outputs: 
   #Bonus points for useful outputs!
