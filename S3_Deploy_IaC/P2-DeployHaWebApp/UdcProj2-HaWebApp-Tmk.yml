@@ -168,6 +168,27 @@ Resources:
       RouteTableId: !Ref RteTblPub
       SubnetId: !Ref SubnetPub02
   
+  LnchCnfgBastians:
+    Type: "AWS::AutoScaling::LaunchConfiguration"
+    Properties:
+      AssociatePublicIpAddress: true
+      BlockDeviceMappings:
+        - DeviceName: "/dev/sdk"
+          Ebs:
+            VolumeSize: '10'
+      # IamInstanceProfile: String
+      ImageId: ami-08d489468314a58df
+      InstanceType: t2.micro
+      KeyName: aws-quickstarts
+      # LaunchConfigurationName: String
+      # SecurityGroups: #Associate with public/bastian security group(s) later
+      #   - String
+      UserData:
+        Fn::Base64: !Sub |
+          #!/bin/bash
+          apt-get update -y
+          apt-get upgrade -y
+  
   LnchCnfgWebhosts:
     Type: "AWS::AutoScaling::LaunchConfiguration"
     Properties:
