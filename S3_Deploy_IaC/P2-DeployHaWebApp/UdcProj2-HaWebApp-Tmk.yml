@@ -256,8 +256,8 @@ Resources:
       AutoScalingGroupName: asg-UdcProj2-Webhosts
       LaunchConfigurationName:
         Ref: LnchCnfgWebhosts
-      MaxSize: '1'
-      MinSize: '2'
+      MaxSize: '2'
+      MinSize: '1'
       VPCZoneIdentifier:
         - !Ref SubnetPub01
         - !Ref SubnetPub02
