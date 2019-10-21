@@ -215,30 +215,6 @@ Resources:
       #     aws s3 cp s3://udacity-demo-1/udacity.zip .
       #     unzip -o udacity.zip
   
-  LaunchConfigWebhosts:
-    Type: AWS::AutoScaling::LaunchConfiguration
-    Properties:
-      AssociatePublicIpAddress: true  #Disable when moving to Pvt subnets
-      BlockDeviceMappings:
-        - DeviceName: "/dev/sdk"
-          Ebs:
-            VolumeSize: '10'
-      ImageId: ami-005bdb005fb00e791
-      InstanceType: t3.medium
-      KeyName: aws-quickstarts
-      # SecurityGroups:
-      #   - Ref: WebServerSecGroup
-      UserData:
-        Fn::Base64: !Sub |
-          #!/bin/bash
-          apt-get update -y
-          apt-get install unzip awscli -y
-          apt-get install apache2 -y
-          systemctl start apache2.service
-          cd /var/www/html
-          aws s3 cp s3://udacity-demo-1/udacity.zip .
-          unzip -o udacity.zip
-
   AutoScaleGroupBastions: 
     Type: AWS::AutoScaling::AutoScalingGroup
     Properties:
