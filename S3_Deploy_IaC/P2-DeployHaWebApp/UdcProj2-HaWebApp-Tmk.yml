@@ -211,7 +211,7 @@ Resources:
     Type: "AWS::AutoScaling::LaunchConfiguration"
     Properties:
       AssociatePublicIpAddress: true  #Disable when moving to Pvt subnets
-      IamInstanceProfile: ProfileWithRolesForOurApp
+      IamInstanceProfile: !Ref ProfileWithRolesForOurApp
       BlockDeviceMappings:
         - DeviceName: "/dev/sdk"
           Ebs:
