@@ -175,13 +175,13 @@ Resources:
     Properties:
       GroupDescription: Allow all traffic to Bastian hosts (in and out)
       SecurityGroupEgress:
-        - IpProtocol: tcp
+        - IpProtocol: -1
           FromPort: 0
           ToPort: 65535
           CidrIp: 0.0.0.0/0
       SecurityGroupIngress:
         - IpProtocol: tcp
-          FromPort: 0
+          FromPort: -1
           ToPort: 65535
           CidrIp: 0.0.0.0/0
       VpcId: !Ref VPC
@@ -247,7 +247,7 @@ Resources:
         - !Ref SubnetPub02
       Tags: 
         - Key: Name
-          Value: !Sub ${EnvName} Bastian hosts
+          Value: !Sub ${EnvName}-Bastians
           PropagateAtLaunch: 'true'
 
   AutoScaleGroupWebhosts: 
@@ -264,7 +264,7 @@ Resources:
         - !Ref SubnetPub02
       Tags: 
         - Key: Name
-          Value: !Sub ${EnvName} Webhosts
+          Value: !Sub ${EnvName}-Webhosts
           PropagateAtLaunch: 'true'
 
 Outputs: 
