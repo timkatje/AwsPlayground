@@ -186,8 +186,8 @@ Resources:
           ToPort: -1
           CidrIp: 0.0.0.0/0
         - Description: Allow in all ICMP (IPv6)
-          IpProtocol: icmp 
-          FromPort: -1  #ALL ICMP
+          IpProtocol: 58  #ICMPv6 
+          FromPort: -1    #ALL ICMPv6
           ToPort: -1
           CidrIpv6: ::/0
       VpcId: !Ref VPC
@@ -208,8 +208,8 @@ Resources:
           ToPort: -1
           CidrIp: 0.0.0.0/0
         - Description: Allow in all ICMP (IPv6)
-          IpProtocol: icmp 
-          FromPort: -1  #ALL ICMP
+          IpProtocol: 58  #ICMPv6 
+          FromPort: -1    #ALL ICMPv6
           ToPort: -1
           CidrIpv6: ::/0
         - Description: Allow in all HTTP
