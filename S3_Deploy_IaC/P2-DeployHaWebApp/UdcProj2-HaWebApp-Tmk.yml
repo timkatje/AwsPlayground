@@ -175,7 +175,7 @@ Resources:
     Properties:
       GroupDescription: Permit SSH and ICMP in & all out on Bastian hosts
       SecurityGroupIngress:
-        - Description: Allow in <ALL> SSH!!!
+        - Description: Allow in ALL SSH!!!
           IpProtocol: tcp #Lock down SSH traffic to specific hosts in production
           FromPort: 22  #SSH
           ToPort: 22
@@ -197,7 +197,7 @@ Resources:
     Properties:
       GroupDescription: Webhosts permit all Web traffic in, and all traffic out
       SecurityGroupIngress:
-        - Description: Allow in <ALL> SSH!!!
+        - Description: Allow in ALL SSH!!!
           IpProtocol: tcp #Remove completely or lock down SSH traffic to Bastian hosts when in production
           FromPort: 22  #SSH
           ToPort: 22
