@@ -174,16 +174,50 @@ Resources:
     Type: "AWS::EC2::SecurityGroup"
     Properties:
       GroupDescription: Allow all traffic to Bastian hosts (in and out)
-      SecurityGroupEgress:
-        - IpProtocol: -1
-          FromPort: 0
-          ToPort: 65535
-          CidrIp: 0.0.0.0/0
+      # SecurityGroupEgress:
+      #   - IpProtocol: -1
+      #     FromPort: 0
+      #     ToPort: 65535
+      #     CidrIp: 0.0.0.0/0
       SecurityGroupIngress:
         - IpProtocol: -1
-          FromPort: 0
-          ToPort: 65535
+          # FromPort: 0
+          # ToPort: 65535
           CidrIp: 0.0.0.0/0
+      VpcId: !Ref VPC
+  
+  SecGrpWebhosts: # Lock down this security group later
+    Type: "AWS::EC2::SecurityGroup"
+    Properties:
+      GroupDescription: Webhosts permit all Web traffic in, and all traffic out
+      SecurityGroupEgress:
+        - IpProtocol: -1
+          CidrIp: 0.0.0.0/0
+      SecurityGroupIngress:
+        - IpProtocol: tcp #Remove completely or lock down SSH traffic to Bastian hosts when in production
+          FromPort: 22  #SSH
+          ToPort: 22
+          CidrIp: 0.0.0.0/0
+        - IpProtocol: tcp 
+          FromPort: 80  #HTTP
+          ToPort: 80
+          CidrIp: 0.0.0.0/0
+        - IpProtocol: -1 
+          FromPort: -1  #ALL ICMP
+          ToPort: -1
+          CidrIp: 0.0.0.0/0
+        - IpProtocol: tcp
+          FromPort: 443 #HTTPS
+          ToPort: 443
+          CidrIp: 0.0.0.0/0
+        - IpProtocol: tcp
+          FromPort: 80  #HTTP (IPv6)
+          ToPort: 80
+          CidrIp: ::/0
+        - IpProtocol: tcp
+          FromPort: 443 #HTTPS (IPv6)
+          ToPort: 443
+          CidrIp: ::/0
       VpcId: !Ref VPC
   
   LnchCnfgBastians:
@@ -221,8 +255,8 @@ Resources:
       KeyName: aws-quickstarts  #Remove key when done testing and admin moves to Bastian hosts
       # LaunchConfigurationName: LC-UdcProj2-Webhosts
       SecurityGroups:
-        - Ref: SecGrpBastians # Switch to Webhost-specific security group later
-      UserData: # Script provided in final-project-starter.yml
+        - Ref: SecGrpWebhosts
+      UserData: # Script provided from final-project-starter.yml
         Fn::Base64: !Sub |
           #!/bin/bash
           apt-get update -y
