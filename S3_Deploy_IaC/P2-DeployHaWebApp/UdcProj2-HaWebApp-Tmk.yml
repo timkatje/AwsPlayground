@@ -173,10 +173,23 @@ Resources:
   SecGrpBastians: # Lock down this security group later
     Type: "AWS::EC2::SecurityGroup"
     Properties:
-      GroupDescription: Allow all traffic to Bastian hosts (in and out)
+      GroupDescription: Permit SSH and ICMP in & all out on Bastian hosts
       SecurityGroupIngress:
-        - IpProtocol: -1
+        - Description: Allow in <ALL> SSH!!!
+          IpProtocol: tcp #Lock down SSH traffic to specific hosts in production
+          FromPort: 22  #SSH
+          ToPort: 22
           CidrIp: 0.0.0.0/0
+        - Description: Allow in all ICMP
+          IpProtocol: icmp 
+          FromPort: -1  #ALL ICMP
+          ToPort: -1
+          CidrIp: 0.0.0.0/0
+        - Description: Allow in all ICMP (IPv6)
+          IpProtocol: icmp 
+          FromPort: -1  #ALL ICMP
+          ToPort: -1
+          CidrIpv6: ::/0
       VpcId: !Ref VPC
   
   SecGrpWebhosts: # Lock down this security group later
@@ -184,28 +197,38 @@ Resources:
     Properties:
       GroupDescription: Webhosts permit all Web traffic in, and all traffic out
       SecurityGroupIngress:
-        - Description: Allow SSH in from any IPv4 source
+        - Description: Allow in <ALL> SSH!!!
           IpProtocol: tcp #Remove completely or lock down SSH traffic to Bastian hosts when in production
           FromPort: 22  #SSH
           ToPort: 22
           CidrIp: 0.0.0.0/0
-        - IpProtocol: tcp 
-          FromPort: 80  #HTTP
-          ToPort: 80
-          CidrIp: 0.0.0.0/0
-        - IpProtocol: icmp 
+        - Description: Allow in all ICMP
+          IpProtocol: icmp 
           FromPort: -1  #ALL ICMP
           ToPort: -1
           CidrIp: 0.0.0.0/0
-        - IpProtocol: tcp
+        - Description: Allow in all ICMP (IPv6)
+          IpProtocol: icmp 
+          FromPort: -1  #ALL ICMP
+          ToPort: -1
+          CidrIpv6: ::/0
+        - Description: Allow in all HTTP
+          IpProtocol: tcp 
+          FromPort: 80  #HTTP
+          ToPort: 80
+          CidrIp: 0.0.0.0/0
+        - Description: Allow in all HTTPS
+          IpProtocol: tcp 
           FromPort: 443 #HTTPS
           ToPort: 443
           CidrIp: 0.0.0.0/0
-        - IpProtocol: tcp
+        - Description: Allow in all HTTP (IPv6)
+          IpProtocol: tcp 
           FromPort: 80  #HTTP (IPv6)
           ToPort: 80
           CidrIpv6: ::/0
-        - IpProtocol: tcp
+        - Description: Allow in all HTTPS (IPv6)
+          IpProtocol: tcp 
           FromPort: 443 #HTTPS (IPv6)
           ToPort: 443
           CidrIpv6: ::/0
