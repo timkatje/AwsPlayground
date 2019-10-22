@@ -174,15 +174,8 @@ Resources:
     Type: "AWS::EC2::SecurityGroup"
     Properties:
       GroupDescription: Allow all traffic to Bastian hosts (in and out)
-      # SecurityGroupEgress:
-      #   - IpProtocol: -1
-      #     FromPort: 0
-      #     ToPort: 65535
-      #     CidrIp: 0.0.0.0/0
       SecurityGroupIngress:
         - IpProtocol: -1
-          # FromPort: 0
-          # ToPort: 65535
           CidrIp: 0.0.0.0/0
       VpcId: !Ref VPC
   
@@ -190,13 +183,6 @@ Resources:
     Type: "AWS::EC2::SecurityGroup"
     Properties:
       GroupDescription: Webhosts permit all Web traffic in, and all traffic out
-      SecurityGroupEgress:
-        - Description: Allow all IPv4 traffic out
-          IpProtocol: -1
-          CidrIp: 0.0.0.0/0
-        - Description: Allow all IPv6 traffic out
-          IpProtocol: -1
-          CidrIpv6: ::/0
       SecurityGroupIngress:
         - Description: Allow SSH in from any IPv4 source
           IpProtocol: tcp #Remove completely or lock down SSH traffic to Bastian hosts when in production
