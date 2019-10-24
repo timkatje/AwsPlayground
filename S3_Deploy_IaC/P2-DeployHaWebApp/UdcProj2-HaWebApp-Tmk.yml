@@ -60,7 +60,16 @@ Parameters:
       - t3.medium
       - t3.large
 
-    
+  BastionCount:
+    Description: Enter the number of Bastion hosts to provision
+    Type: Number
+    Default: '2'
+
+  WebhostCount:
+    Description: Enter the number of Bastion hosts to provision
+    Type: Number
+    Default: '4'
+
 Resources:
   #instance profile contains the IAM Role name(s) that we want to associate to our auto scaling EC2 Servers
     # Manually created a "UdacityS3ReadOnlyEC2" IAM role within AWS Console that references the AWS-provided
@@ -319,8 +328,8 @@ Resources:
       # AutoScalingGroupName: asg-UdcProj2-Bastions
       LaunchConfigurationName:
         Ref: LnchCnfgBastions
-      MaxSize: '1'
-      MinSize: '1'
+      MaxSize: !Ref BastionCount
+      MinSize: !Ref BastionCount
       VPCZoneIdentifier:
         - !Ref SubnetPub01
         - !Ref SubnetPub02
@@ -336,8 +345,8 @@ Resources:
       # AutoScalingGroupName: asg-UdcProj2-Webhosts
       LaunchConfigurationName:
         Ref: LnchCnfgWebhosts
-      MaxSize: '2'
-      MinSize: '1'
+      MaxSize: !Ref WebhostCount
+      MinSize: !Ref WebhostCount
       VPCZoneIdentifier:
         - !Ref SubnetPub01
         - !Ref SubnetPub02
