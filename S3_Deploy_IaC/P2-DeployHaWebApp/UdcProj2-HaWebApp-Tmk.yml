@@ -457,6 +457,40 @@ Resources:
         - Key: Name
           Value: !Sub ${EnvName} Webhost Load Balancer
 
+  ListenerLbWebhosts:
+    Type: "AWS::ElasticLoadBalancingV2::Listener"
+    Properties:
+      DefaultActions: #required
+        - Type: forward
+          TargetGroupArn: !Ref TgtGrpLbWebhosts
+      LoadBalancerArn: !Ref LbWebhosts
+      Port: '80'
+      Protocol: HTTP #required
+  
+  LsnrRuleLbWebhosts:
+    Type: "AWS::ElasticLoadBalancingV2::ListenerRule"
+    Properties:
+      Actions: #required
+        - Type: forward
+          TargetGroupArn: !Ref TgtGrpLbWebhosts
+      Conditions: #required
+        - Field: path-pattern
+          Values: [/]
+      ListenerArn: !Ref ListenerLbWebhosts #required
+      Priority: 1 #required
+
+  TgtGrpLbWebhosts:
+    Type: "AWS::ElasticLoadBalancingV2::TargetGroup"
+    Properties:
+      HealthCheckIntervalSeconds: 15
+      HealthCheckTimeoutSeconds: 8
+      HealthyThresholdCount: 2
+      Port: 80
+      Protocol: HTTP
+      UnhealthyThresholdCount: 4
+      VpcId: !Ref VPC
+  
+  
 Outputs: 
   #Bonus points for useful outputs!
   VPC: 
@@ -518,3 +552,9 @@ Outputs:
     Value: !Ref RteTblPvt02
     Export:
       Name: !Sub ${EnvName}-RteTbl-Pvt02
+
+  ProjectURL:
+    Description: The full URL to the load-balanced web application
+    Value: !Join [ '', ["http://", !GetAtt LbWebhosts.DNSName ] ]
+    Export:
+      Name: !Sub ${EnvName}-URL
