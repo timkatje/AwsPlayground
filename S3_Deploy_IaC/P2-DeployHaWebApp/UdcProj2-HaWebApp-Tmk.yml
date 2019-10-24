@@ -1,35 +1,39 @@
 Parameters:
 # whatever you consider a changing value, put it as a parameter instead of hard-coding it into your script
   EnvName:
-      Description: The environment name prefixed to all resources created by this template
-      Type: String
-      Default: UdcProj2
+    Description: The environment name prefixed to all resources created by this template
+    Type: String
+    Default: UdcProj2
 
   IpCidrVpc: 
-      Description: Enter the IP (CIDR) range for the VPC
-      Type: String
-      Default: 10.0.0.0/16
+    Description: Enter the IP (CIDR) range for the VPC
+    Type: String
+    Default: 10.0.0.0/16
 
   IpCidrSubnetPub01: 
-      Description: Enter the IP (CIDR) range for Public Subnet #1
-      Type: String
-      Default: 10.0.1.0/24
+    Description: Enter the IP (CIDR) range for Public Subnet #1
+    Type: String
+    Default: 10.0.1.0/24
 
   IpCidrSubnetPub02: 
-      Description: Enter the IP (CIDR) range for Public Subnet #2
-      Type: String
-      Default: 10.0.2.0/24
+    Description: Enter the IP (CIDR) range for Public Subnet #2
+    Type: String
+    Default: 10.0.2.0/24
 
   IpCidrSubnetPvt01: 
-      Description: Enter the IP (CIDR) range for Private Subnet #1
-      Type: String
-      Default: 10.0.3.0/24
+    Description: Enter the IP (CIDR) range for Private Subnet #1
+    Type: String
+    Default: 10.0.3.0/24
 
   IpCidrSubnetPvt02: 
-      Description: Enter the IP (CIDR) range for Private Subnet #2
-      Type: String
-      Default: 10.0.4.0/24
+    Description: Enter the IP (CIDR) range for Private Subnet #2
+    Type: String
+    Default: 10.0.4.0/24
 
+  IpCidrSshSource:
+    Description: Enter the IP (CIDR) address/range for SSH access source
+    Type: String
+    Default: 0.0.0.0/0
 Resources:
   #instance profile contains the IAM Role name(s) that we want to associate to our auto scaling EC2 Servers
     # Manually created a "UdacityS3ReadOnlyEC2" IAM role within AWS Console that references the AWS-provided
@@ -173,13 +177,13 @@ Resources:
   SecGrpBastions: # Lock down this security group later
     Type: "AWS::EC2::SecurityGroup"
     Properties:
-      GroupDescription: Permit SSH and ICMP in & all out on Bastion hosts
+      GroupDescription: Bastion hosts permit select SSH and all ICMP(v6) in; all traffic out
       SecurityGroupIngress:
-        - Description: Allow in ALL SSH!!!
+        - Description: Allow in (hopefully) select SSH
           IpProtocol: tcp 
           FromPort: 22  #SSH
           ToPort: 22
-          CidrIp: 0.0.0.0/0 #Lock down SSH traffic to specific (parameterized) hosts in production
+          CidrIp: !Ref IpCidrSshSource
         - Description: Allow in all ICMP
           IpProtocol: icmp 
           FromPort: -1  #ALL ICMP
@@ -195,13 +199,13 @@ Resources:
   SecGrpWebhosts: # Lock down this security group later
     Type: "AWS::EC2::SecurityGroup"
     Properties:
-      GroupDescription: Webhosts permit all Web traffic in, and all traffic out
+      GroupDescription: Webhosts permit all HTTP(S) and ICMP(v6) traffic in; all traffic out; SSH from Bastions
       SecurityGroupIngress:
         - Description: Allow in ALL SSH!!!
-          IpProtocol: tcp #Remove completely or lock down SSH traffic to Bastion hosts when in production
+          IpProtocol: tcp 
           FromPort: 22  #SSH
           ToPort: 22
-          CidrIp: 0.0.0.0/0
+          SourceSecurityGroupId: !Ref SecGrpBastions
         - Description: Allow in all ICMP
           IpProtocol: icmp 
           FromPort: -1  #ALL ICMP
