@@ -227,6 +227,7 @@ Resources:
 
   DefRtePvt01:
     Type: AWS::EC2::Route
+    DependsOn: NatGw01
     Properties:
       RouteTableId: !Ref RteTblPvt01
       DestinationCidrBlock: 0.0.0.0/0
@@ -234,6 +235,7 @@ Resources:
 
   DefRtePvt02:
     Type: AWS::EC2::Route
+    DependsOn: NatGw02
     Properties:
       RouteTableId: !Ref RteTblPvt02
       DestinationCidrBlock: 0.0.0.0/0
