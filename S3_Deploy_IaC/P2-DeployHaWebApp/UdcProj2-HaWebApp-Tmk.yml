@@ -34,6 +34,33 @@ Parameters:
     Description: Enter the IP (CIDR) address/range for SSH access source
     Type: String
     Default: 0.0.0.0/0
+
+  InstTypeBastions:
+    Description: Choose the instance type for the Bastion hosts
+    Type: String
+    Default: t2.micro
+    AllowedValues:
+      - t2.nano
+      - t2.micro
+      - t2.small
+      - t3.nano
+      - t3.micro
+      - t3.small
+
+  InstTypeWebhosts:
+    Description: Choose the instance type for the Webhosts
+    Type: String
+    Default: t2.micro #switch this to t2.small for submission
+    AllowedValues:
+      - t2.micro
+      - t2.small
+      - t2.medium
+      - t2.large
+      - t3.small
+      - t3.medium
+      - t3.large
+
+    
 Resources:
   #instance profile contains the IAM Role name(s) that we want to associate to our auto scaling EC2 Servers
     # Manually created a "UdacityS3ReadOnlyEC2" IAM role within AWS Console that references the AWS-provided
@@ -248,7 +275,7 @@ Resources:
             VolumeSize: '10'
       # IamInstanceProfile: String
       ImageId: ami-08d489468314a58df
-      InstanceType: t2.micro
+      InstanceType: !Ref InstTypeBastion
       KeyName: aws-quickstarts
       # LaunchConfigurationName: LC-UdcProj2-Bastions
       SecurityGroups: #Associate with public/bastion security group(s) later
@@ -269,7 +296,7 @@ Resources:
           Ebs:
             VolumeSize: '10'
       ImageId: ami-005bdb005fb00e791
-      InstanceType: t3.medium
+      InstanceType: !Ref InstTypeWebhost
       KeyName: aws-quickstarts  #Remove key when done testing and admin moves to Bastion hosts
       # LaunchConfigurationName: LC-UdcProj2-Webhosts
       SecurityGroups:
