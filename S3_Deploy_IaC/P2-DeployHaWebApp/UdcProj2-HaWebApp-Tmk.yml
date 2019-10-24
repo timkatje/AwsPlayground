@@ -230,14 +230,14 @@ Resources:
     Properties:
       RouteTableId: !Ref RteTblPvt01
       DestinationCidrBlock: 0.0.0.0/0
-      GatewayId: !Ref NatGw01
+      NatGatewayId: !Ref NatGw01
 
   DefRtePvt02:
     Type: AWS::EC2::Route
     Properties:
       RouteTableId: !Ref RteTblPvt02
       DestinationCidrBlock: 0.0.0.0/0
-      GatewayId: !Ref NatGw02
+      NatGatewayId: !Ref NatGw02
 
   SubnetRteTblAssocPvt01:
     Type: "AWS::EC2::SubnetRouteTableAssociation"
