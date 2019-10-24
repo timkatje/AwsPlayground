@@ -325,22 +325,22 @@ Resources:
           IpProtocol: tcp 
           FromPort: 80  #HTTP
           ToPort: 80
-          CidrIp: 0.0.0.0/0
+          CidrIp: !Ref IpCidrVpc
         - Description: Allow out any HTTPS
           IpProtocol: tcp 
           FromPort: 443  #HTTPS
           ToPort: 443
-          CidrIp: 0.0.0.0/0
-        - Description: Allow out any HTTP (IPv6)
-          IpProtocol: tcp 
-          FromPort: 80  #HTTP
-          ToPort: 80
-          CidrIpv6: ::/0
-        - Description: Allow out any HTTPS (IPv6)
-          IpProtocol: tcp 
-          FromPort: 443  #HTTP
-          ToPort: 443
-          CidrIpv6: ::/0
+          CidrIp: !Ref IpCidrVpc
+        # - Description: Allow out any HTTP (IPv6)
+        #   IpProtocol: tcp 
+        #   FromPort: 80  #HTTP
+        #   ToPort: 80
+        #   CidrIpv6: ::/0
+        # - Description: Allow out any HTTPS (IPv6)
+        #   IpProtocol: tcp 
+        #   FromPort: 443  #HTTP
+        #   ToPort: 443
+        #   CidrIpv6: ::/0
       SecurityGroupIngress:
         - Description: Allow in any HTTP
           IpProtocol: tcp 
@@ -352,16 +352,16 @@ Resources:
           FromPort: 443  #HTTPS
           ToPort: 443
           CidrIp: 0.0.0.0/0
-        - Description: Allow in any HTTP (IPv6)
-          IpProtocol: tcp 
-          FromPort: 80  #HTTP
-          ToPort: 80
-          CidrIpv6: ::/0
-        - Description: Allow in any HTTPS (IPv6)
-          IpProtocol: tcp 
-          FromPort: 443  #HTTP
-          ToPort: 443
-          CidrIpv6: ::/0
+        # - Description: Allow in any HTTP (IPv6)
+        #   IpProtocol: tcp 
+        #   FromPort: 80  #HTTP
+        #   ToPort: 80
+        #   CidrIpv6: ::/0
+        # - Description: Allow in any HTTPS (IPv6)
+        #   IpProtocol: tcp 
+        #   FromPort: 443  #HTTP
+        #   ToPort: 443
+        #   CidrIpv6: ::/0
       VpcId: !Ref VPC
 
   LnchCnfgBastions:
@@ -433,10 +433,14 @@ Resources:
     DependsOn: InetGwAttach
     Properties:
       # AutoScalingGroupName: asg-UdcProj2-Webhosts
+      HealthCheckGracePeriod: 6000
+      HealthCheckType: ELB
       LaunchConfigurationName:
         Ref: LnchCnfgWebhosts
       MaxSize: !Ref WebhostCount
       MinSize: !Ref WebhostCount
+      TargetGroupARNs:
+        - !Ref TgtGrpLbWebhosts
       VPCZoneIdentifier:
         - !Ref SubnetPub01
         - !Ref SubnetPub02
