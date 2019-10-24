@@ -170,16 +170,16 @@ Resources:
       SubnetId: !Ref SubnetPub02
 
   # Define the security groups for the project
-  SecGrpBastians: # Lock down this security group later
+  SecGrpBastions: # Lock down this security group later
     Type: "AWS::EC2::SecurityGroup"
     Properties:
-      GroupDescription: Permit SSH and ICMP in & all out on Bastian hosts
+      GroupDescription: Permit SSH and ICMP in & all out on Bastion hosts
       SecurityGroupIngress:
         - Description: Allow in ALL SSH!!!
-          IpProtocol: tcp #Lock down SSH traffic to specific hosts in production
+          IpProtocol: tcp 
           FromPort: 22  #SSH
           ToPort: 22
-          CidrIp: 0.0.0.0/0
+          CidrIp: 0.0.0.0/0 #Lock down SSH traffic to specific (parameterized) hosts in production
         - Description: Allow in all ICMP
           IpProtocol: icmp 
           FromPort: -1  #ALL ICMP
@@ -198,7 +198,7 @@ Resources:
       GroupDescription: Webhosts permit all Web traffic in, and all traffic out
       SecurityGroupIngress:
         - Description: Allow in ALL SSH!!!
-          IpProtocol: tcp #Remove completely or lock down SSH traffic to Bastian hosts when in production
+          IpProtocol: tcp #Remove completely or lock down SSH traffic to Bastion hosts when in production
           FromPort: 22  #SSH
           ToPort: 22
           CidrIp: 0.0.0.0/0
@@ -234,7 +234,7 @@ Resources:
           CidrIpv6: ::/0
       VpcId: !Ref VPC
   
-  LnchCnfgBastians:
+  LnchCnfgBastions:
     Type: "AWS::AutoScaling::LaunchConfiguration"
     Properties:
       AssociatePublicIpAddress: true
@@ -246,9 +246,9 @@ Resources:
       ImageId: ami-08d489468314a58df
       InstanceType: t2.micro
       KeyName: aws-quickstarts
-      # LaunchConfigurationName: LC-UdcProj2-Bastians
-      SecurityGroups: #Associate with public/bastian security group(s) later
-        - Ref: SecGrpBastians
+      # LaunchConfigurationName: LC-UdcProj2-Bastions
+      SecurityGroups: #Associate with public/bastion security group(s) later
+        - Ref: SecGrpBastions
       UserData:
         Fn::Base64: !Sub |
           #!/bin/bash
@@ -266,7 +266,7 @@ Resources:
             VolumeSize: '10'
       ImageId: ami-005bdb005fb00e791
       InstanceType: t3.medium
-      KeyName: aws-quickstarts  #Remove key when done testing and admin moves to Bastian hosts
+      KeyName: aws-quickstarts  #Remove key when done testing and admin moves to Bastion hosts
       # LaunchConfigurationName: LC-UdcProj2-Webhosts
       SecurityGroups:
         - Ref: SecGrpWebhosts
@@ -285,9 +285,9 @@ Resources:
     Type: AWS::AutoScaling::AutoScalingGroup
     DependsOn: InetGwAttach
     Properties:
-      # AutoScalingGroupName: asg-UdcProj2-Bastians
+      # AutoScalingGroupName: asg-UdcProj2-Bastions
       LaunchConfigurationName:
-        Ref: LnchCnfgBastians
+        Ref: LnchCnfgBastions
       MaxSize: '1'
       MinSize: '1'
       VPCZoneIdentifier:
@@ -295,7 +295,7 @@ Resources:
         - !Ref SubnetPub02
       Tags: 
         - Key: Name
-          Value: !Sub ${EnvName}-Bastians
+          Value: !Sub ${EnvName}-Bastions
           PropagateAtLaunch: 'true'
 
   AutoScaleGroupWebhosts: 
