@@ -215,7 +215,7 @@ Resources:
       VpcId: !Ref VPC
       Tags:
         - Key: Name
-          Value: !Sub ${EnvName} Private Routes 1
+          Value: !Sub ${EnvName} Private Routes (AZ1)
 
   RteTblPvt02:
     Type: AWS::EC2::RouteTable
@@ -223,7 +223,7 @@ Resources:
       VpcId: !Ref VPC
       Tags:
         - Key: Name
-          Value: !Sub ${EnvName} Private Routes 1
+          Value: !Sub ${EnvName} Private Routes (AZ2)
 
   DefRtePvt01:
     Type: AWS::EC2::Route
@@ -440,3 +440,21 @@ Outputs:
     Value: !Ref SubnetPvt02
     Export:
       Name: !Sub ${EnvName}-Subnet-Pvt02
+
+  VPCPublicRouteTable:
+    Description: Public Routing
+    Value: !Ref RteTblPub
+    Export:
+      Name: !Sub ${EnvName}-RteTbl-Pub
+
+  VPCPrivateRouteTable1:
+    Description: Private Routing AZ1
+    Value: !Ref RteTblPvt01
+    Export:
+      Name: !Sub ${EnvName}-RteTbl-Pvt01
+
+  VPCPrivateRouteTable2:
+    Description: Private Routing AZ2
+    Value: !Ref RteTblPvt02
+    Export:
+      Name: !Sub ${EnvName}-RteTbl-Pvt02
