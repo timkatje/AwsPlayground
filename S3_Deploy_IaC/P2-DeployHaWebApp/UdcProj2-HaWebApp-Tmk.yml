@@ -304,7 +304,7 @@ Resources:
         - DeviceName: "/dev/sdk"
           Ebs:
             VolumeSize: '10'
-      ImageId: ami-005bdb005fb00e791
+      ImageId: ami-09c6723c6c24250c9  #ubuntu/images/hvm-ssd/ubuntu-bionic-18.04-amd64-server-20191021
       InstanceType: !Ref InstTypeWebhosts
       KeyName: aws-quickstarts  #Remove key when done testing and admin moves to Bastion hosts
       # LaunchConfigurationName: LC-UdcProj2-Webhosts
