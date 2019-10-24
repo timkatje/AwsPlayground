@@ -451,8 +451,8 @@ Resources:
       SecurityGroups:
         - Ref: SecGrpLB
       Subnets:
-        - Ref: SubnetPvt01
-        - Ref: SubnetPvt02
+        - Ref: SubnetPub01
+        - Ref: SubnetPub02
       Tags:
         - Key: Name
           Value: !Sub ${EnvName} Webhost Load Balancer
