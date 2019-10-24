@@ -197,18 +197,60 @@ Resources:
       DestinationCidrBlock: 0.0.0.0/0
       GatewayId: !Ref InetGw
 
-  RteTblAssocSubnetPub01:
+  SubnetRteTblAssocPub01:
     Type: AWS::EC2::SubnetRouteTableAssociation
     Properties:
       RouteTableId: !Ref RteTblPub
       SubnetId: !Ref SubnetPub01
 
-  RteTblAssocSubnetPub02:
+  SubnetRteTblAssocPub02:
     Type: AWS::EC2::SubnetRouteTableAssociation
     Properties:
       RouteTableId: !Ref RteTblPub
       SubnetId: !Ref SubnetPub02
 
+  RteTblPvt01:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId: !Ref VPC
+      Tags:
+        - Key: Name
+          Value: !Sub ${EnvName} Private Routes 1
+
+  RteTblPvt02:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId: !Ref VPC
+      Tags:
+        - Key: Name
+          Value: !Sub ${EnvName} Private Routes 1
+
+  DefRtePvt01:
+    Type: AWS::EC2::Route
+    Properties:
+      RouteTableId: !Ref RteTblPvt01
+      DestinationCidrBlock: 0.0.0.0/24
+      GatewayId: NatGw01
+
+  DefRtePvt02:
+    Type: AWS::EC2::Route
+    Properties:
+      RouteTableId: !Ref RteTblPvt02
+      DestinationCidrBlock: 0.0.0.0/24
+      GatewayId: NatGw02
+
+  SubnetRteTblAssocPvt01:
+    Type: "AWS::EC2::SubnetRouteTableAssociation"
+    Properties:
+      RouteTableId: !Ref RteTblPvt01
+      SubnetId: !Ref SubnetPvt01
+  
+  SubnetRteTblAssocPvt02:
+    Type: "AWS::EC2::SubnetRouteTableAssociation"
+    Properties:
+      RouteTableId: !Ref RteTblPvt02
+      SubnetId: !Ref SubnetPvt02
+  
   # Define the security groups for the project
   SecGrpBastions: # Lock down this security group later
     Type: "AWS::EC2::SecurityGroup"
