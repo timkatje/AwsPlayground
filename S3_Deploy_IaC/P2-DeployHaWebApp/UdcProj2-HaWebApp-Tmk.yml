@@ -315,7 +315,55 @@ Resources:
           ToPort: 443
           CidrIpv6: ::/0
       VpcId: !Ref VPC
-  
+
+  SecGrpLB: # Lock down this security group later
+    Type: "AWS::EC2::SecurityGroup"
+    Properties:
+      GroupDescription: Load Balancer permits all WEB traffic in and out
+      SecurityGroupEgress:
+        - Description: Allow out any HTTP
+          IpProtocol: tcp 
+          FromPort: 80  #HTTP
+          ToPort: 80
+          CidrIp: 0.0.0.0/0
+        - Description: Allow out any HTTPS
+          IpProtocol: tcp 
+          FromPort: 443  #HTTPS
+          ToPort: 443
+          CidrIp: 0.0.0.0/0
+        - Description: Allow out any HTTP (IPv6)
+          IpProtocol: tcp 
+          FromPort: 80  #HTTP
+          ToPort: 80
+          CidrIpv6: ::/0
+        - Description: Allow out any HTTPS (IPv6)
+          IpProtocol: tcp 
+          FromPort: 443  #HTTP
+          ToPort: 443
+          CidrIpv6: ::/0
+      SecurityGroupIngress:
+        - Description: Allow in any HTTP
+          IpProtocol: tcp 
+          FromPort: 80  #HTTP
+          ToPort: 80
+          CidrIp: 0.0.0.0/0
+        - Description: Allow in any HTTPS
+          IpProtocol: tcp 
+          FromPort: 443  #HTTPS
+          ToPort: 443
+          CidrIp: 0.0.0.0/0
+        - Description: Allow in any HTTP (IPv6)
+          IpProtocol: tcp 
+          FromPort: 80  #HTTP
+          ToPort: 80
+          CidrIpv6: ::/0
+        - Description: Allow in any HTTPS (IPv6)
+          IpProtocol: tcp 
+          FromPort: 443  #HTTP
+          ToPort: 443
+          CidrIpv6: ::/0
+      VpcId: !Ref VPC
+
   LnchCnfgBastions:
     Type: "AWS::AutoScaling::LaunchConfiguration"
     Properties:
@@ -396,6 +444,18 @@ Resources:
         - Key: Name
           Value: !Sub ${EnvName}-Webhosts
           PropagateAtLaunch: 'true'
+
+  LbWebhosts:
+    Type: AWS::ElasticLoadBalancingV2::LoadBalancer
+    Properties:
+      SecurityGroups:
+        - Ref: SecGrpLB
+      Subnets:
+        - Ref: SubnetPvt01
+        - Ref: SubnetPvt02
+      Tags:
+        - Key: Name
+          Value: !Sub ${EnvName} Webhost Load Balancer
 
 Outputs: 
   #Bonus points for useful outputs!
