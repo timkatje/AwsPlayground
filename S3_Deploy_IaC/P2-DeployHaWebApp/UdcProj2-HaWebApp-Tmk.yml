@@ -373,7 +373,7 @@ Resources:
           Ebs:
             VolumeSize: '10'
       # IamInstanceProfile: String
-      ImageId: ami-08d489468314a58df
+      ImageId: ami-04b762b4289fba92b
       InstanceType: !Ref InstTypeBastions
       KeyName: aws-quickstarts
       # LaunchConfigurationName: LC-UdcProj2-Bastions
