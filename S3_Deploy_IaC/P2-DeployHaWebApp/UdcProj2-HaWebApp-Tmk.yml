@@ -403,8 +403,9 @@ Resources:
       UserData: # Script provided from final-project-starter.yml
         Fn::Base64: !Sub |
           #!/bin/bash
+          echo 'ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDtBGkbItjJ0qbfWYEUsE/aONjBH9EcgPGX5L8QvE7R33daUFiDPNZl3W7VtC5qcXUCtL4nK7R162f/o1bXN8K3902yd1qAMngCWG3tiQT6bc7ACxS9irm/8zBzdwN6on46CPAg6PBEgMLsJY+VAruK6TAG4IvyfN3MyRy3UBk+VoiUA9gkm/LXqdhUXUVdclKhj/F3BOG/h/B43ShfCPB0/n72QlzXtn0BgcZdfX1qQBo0T/MoOSnETKkXM5iisGrpwFR1PukpLI2cli2vmyhPubV8M7DOd+vfDBbaECFc6jgJ2vjdFIw1H+oIYJnJDBuDeZ0+3YK6wwgEGy/QtPNN UdcProj2-Webhosts-SSH2' >> .ssh/authorized_keys
           apt-get update -y
-          apt-get install unzip awscli -y
+          apt-get install unzip awscli ec2-instance-connect -y
           apt-get install apache2 -y
           systemctl start apache2.service
           cd /var/www/html
