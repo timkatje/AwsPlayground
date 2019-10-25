@@ -252,7 +252,7 @@ Resources:
       SubnetId: !Ref SubnetPvt02
   
   # Define the security groups for the project
-  SecGrpBastions: # Lock down this security group later
+  SecGrpBastions: 
     Type: "AWS::EC2::SecurityGroup"
     Properties:
       GroupDescription: Bastion hosts permit select SSH and all ICMP(v6) in; all traffic out
@@ -279,7 +279,7 @@ Resources:
     Properties:
       GroupDescription: Webhosts permit all HTTP(S) and ICMP(v6) traffic in; all traffic out; SSH from Bastions
       SecurityGroupIngress:
-        - Description: Allow in ALL SSH!!!
+        - Description: Allow in Bastion SSH!!!
           IpProtocol: tcp 
           FromPort: 22  #SSH
           ToPort: 22
@@ -316,7 +316,7 @@ Resources:
           CidrIpv6: ::/0
       VpcId: !Ref VPC
 
-  SecGrpLB: # Lock down this security group later
+  SecGrpLB:
     Type: "AWS::EC2::SecurityGroup"
     Properties:
       GroupDescription: Load Balancer permits all WEB traffic in and out
