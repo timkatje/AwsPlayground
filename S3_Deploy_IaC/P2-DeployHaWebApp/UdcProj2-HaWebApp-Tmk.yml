@@ -38,7 +38,7 @@ Parameters:
   InstTypeBastions:
     Description: Choose the instance type for the Bastion hosts
     Type: String
-    Default: t2.micro
+    Default: t2.micro #Use free tier (t2.micro)
     AllowedValues:
       - t2.nano
       - t2.micro
@@ -50,7 +50,7 @@ Parameters:
   InstTypeWebhosts:
     Description: Choose the instance type for the Webhosts
     Type: String
-    Default: t2.micro #switch this to t2.small for submission
+    Default: t2.micro #Use t2.micro for testing, parameter file overrides to t3.small for grading
     AllowedValues:
       - t2.micro
       - t2.small
@@ -396,7 +396,7 @@ Resources:
             VolumeSize: '10'
       ImageId: ami-09c6723c6c24250c9  #ubuntu/images/hvm-ssd/ubuntu-bionic-18.04-amd64-server-20191021
       InstanceType: !Ref InstTypeWebhosts
-      KeyName: aws-quickstarts  #Remove key when done testing and admin moves to Bastion hosts
+      # KeyName: aws-quickstarts  #Disable key when done testing and admin moves to Bastion hosts
       # LaunchConfigurationName: LC-UdcProj2-Webhosts
       SecurityGroups:
         - Ref: SecGrpWebhosts
