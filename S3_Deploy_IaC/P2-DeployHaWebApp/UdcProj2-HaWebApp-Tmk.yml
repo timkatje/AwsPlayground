@@ -388,7 +388,7 @@ Resources:
   LnchCnfgWebhosts:
     Type: "AWS::AutoScaling::LaunchConfiguration"
     Properties:
-      AssociatePublicIpAddress: false  #Disable when moving to Pvt subnets
+      AssociatePublicIpAddress: true  #Disable when moving to Pvt subnets
       IamInstanceProfile: !Ref ProfileWithRolesForOurApp
       BlockDeviceMappings:
         - DeviceName: "/dev/sdk"
