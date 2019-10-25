@@ -1,0 +1,46 @@
+[
+    {
+        "ParameterKey": "EnvName",
+        "ParameterValue": "UdcProj2"
+    },
+    {
+        "ParameterKey": "IpCidrVpc",
+        "ParameterValue": "10.0.0.0/16"
+    },
+    {
+        "ParameterKey": "IpCidrSubnetPub01",
+        "ParameterValue": "10.0.1.0/24"
+    },
+    {
+        "ParameterKey": "IpCidrSubnetPub02",
+        "ParameterValue": "10.0.2.0/24"
+    },
+    {
+        "ParameterKey": "IpCidrSubnetPvt01",
+        "ParameterValue": "10.0.3.0/24"
+    },
+    {
+        "ParameterKey": "IpCidrSubnetPvt02",
+        "ParameterValue": "10.0.4.0/24"
+    },
+    {
+        "ParameterKey": "IpCidrSshSource",
+        "ParameterValue": "136.49.144.68/32"
+    },
+    {
+        "ParameterKey": "InstTypeBastions",
+        "ParameterValue": "t2.micro"
+    },
+    {
+        "ParameterKey": "BastionCount",
+        "ParameterValue": "2"
+    },
+    {
+        "ParameterKey": "InstTypeWebhosts",
+        "ParameterValue": "t3.small"
+    },
+    {
+        "ParameterKey": "WebhostCount",
+        "ParameterValue": "4"
+    }
+]
